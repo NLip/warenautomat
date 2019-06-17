@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExRepClient>
+  <!-- Language: The language to use for the user interface                   -->
+  <Language>de</Language>
+  <!-- Network: Contains the configuration for the network communication      -->
+  <Network>
+    <!-- Server: Contains parameters for the connection to the ExRep-Server.  -->
+    <Server>
+      <!-- Host: The address or the IP of the ExRep-Server.                   -->
+      <Host>152.96.56.59</Host>
+    </Server>
+    <!-- UseSSL: Configures if a secure (encrypted) connection                -->
+    <!-- should be used or not. Valid values are:                             -->
+    <!--  * true, secure connection enabled                                   -->
+    <!--  * false, secure connection disabled                                 -->
+    <UseSSL>false</UseSSL>
+    <!-- Timeout: The time, after that a connection is considered as          -->
+    <!-- faulty and the connection is closed. The attribute gives the         -->
+    <!-- unit the value is in. Valid values for the attribute are:            -->
+    <!--  * msec, for milliseconds                                            -->
+    <!--  * sec,  for seconds                                                 -->
+    <!--  * min,  for minutes                                                 -->
+    <Timeout unit="sec">30</Timeout>
+  </Network>
+  <!-- User: Some informations about the user.                                -->
+  <User>
+    <!-- UserName: Username of the user                                       -->
+    <UserName />
+    <!-- Password: Password of the user.                                      -->
+    <Password>
+      <!-- MD5 & PlainText: No plain text passwords are saved.                -->
+      <!-- If a plain text password is found, it will be encrypted            -->
+      <!-- to MD5 and stored. The plain text password will then               -->
+      <!-- be deleted.                                                        -->
+      <MD5 />
+      <PlainText />
+    </Password>
+  </User>
+  <!-- Ranking: Contains parameters for the ranking functionality.            -->
+  <Ranking>
+    <!-- SortBy: Indicates, according to which column                         -->
+    <!-- the ranking should be sorted.                                        -->
+    <SortBy>0</SortBy>
+  </Ranking>
+  <!-- Logging: Contains parameters for the logging functionality.            -->
+  <Logging>
+    <!-- Module: Configuration of a single module (packet).                   -->
+    <!-- A module-tag is needed for every module.                             -->
+    <Module>
+      <!-- Name: The name of the module.                                      -->
+      <Name>client</Name>
+      <!-- Level: The logging-level (intensity).                              -->
+      <!-- Valid values for the attribute are:                                -->
+      <!--  * off,    logging deactivated                                     -->
+      <!--  * severe, highest priority (only critical)                        -->
+      <!--  * warning                                                         -->
+      <!--  * info                                                            -->
+      <!--  * config                                                          -->
+      <!--  * fine                                                            -->
+      <!--  * finer                                                           -->
+      <!--  * finest, lowest priority (mostly everything)                     -->
+      <Level>off</Level>
+    </Module>
+  </Logging>
+</ExRepClient>
+
