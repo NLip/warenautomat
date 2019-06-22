@@ -1,12 +1,12 @@
 package warenautomat;
 
+import exceptions.InvalidOperationException;
+import java.math.BigDecimal;
 import state.Register;
+import state.TransactionLog;
 import values.Denomination;
 import values.RegisterUpdate;
-import warenautomat.SystemSoftware;
-import static java.lang.Math.min;
-
-import java.util.Map;
+import values.Transaction;
 
 /**
  * Die Kasse verwaltet das eingenommene Geld sowie das Wechselgeld. <br>
@@ -20,12 +20,14 @@ import java.util.Map;
 public class Kasse {
 	private final static int DENOMINATION_NOT_SUPPORTED = -200;
 	private final Register register;
+	private final TransactionLog transactionLog;
   /**
    * Standard-Konstruktor. <br>
    * Führt die nötigen Initialisierungen durch.
    */
   public Kasse() {
     this.register = new Register();
+    this.transactionLog = new TransactionLog();
   }
 
   /**
@@ -86,8 +88,11 @@ public class Kasse {
    *         <code> false </code>, wenn Münzsäule bereits voll war.
    */
   public boolean einnehmen(double pMuenzenBetrag) {
-    
-    return false; // TODO
+      Denomination denomination =
+          Denomination.fromDouble(pMuenzenBetrag)
+              .orElseThrow(() -> new InvalidOperationException("This coin is not supported."));
+
+      return register.tryPutCoin(denomination);
     
   }
 
@@ -95,9 +100,7 @@ public class Kasse {
    * Bewirkt den Auswurf des Restbetrages.
    */
   public void gibWechselGeld() {
-    
-    // TODO
-    
+    register.returnCredit();
   }
 
   /**
@@ -107,9 +110,18 @@ public class Kasse {
    * @return Gesamtbetrag der bisher verkauften Waren.
    */
   public double gibBetragVerkaufteWaren() {
-    
-    return 0.0; // TODO
-    
+      BigDecimal sumOfAllIncome = transactionLog.getTransactions()
+          .stream()
+          .map(Transaction::getPriceAtDate)
+          .reduce(BigDecimal.ZERO, BigDecimal::add);
+      return sumOfAllIncome.doubleValue();
   }
 
+    public Register getRegister() {
+        return register;
+    }
+
+    public TransactionLog getTransactionLog() {
+        return transactionLog;
+    }
 }

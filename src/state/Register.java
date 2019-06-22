@@ -86,13 +86,14 @@ public final class Register {
 	public void purchase(BigDecimal price) {
 		proposedChange = proposeHoldings(price)
 				.orElseThrow(() -> new InvalidOperationException("Cannot find holdings for purchase."));
+
 	}
 
 	public void returnCredit() {
 		coinContainers.forEach(((denomination, coinContainer) -> {
 			int numberOfCoins = proposedChange.get(denomination);
 			if (numberOfCoins != 0) {
-				repeat(numberOfCoins).forEach(__ -> {
+				repeat(numberOfCoins, __ -> {
 					releaseCoin(denomination);
 					coinContainer.decrement();
 				});

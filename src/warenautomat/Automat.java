@@ -1,6 +1,9 @@
 package warenautomat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import state.Machine;
+import values.Product;
 
 /**
  * Der Automat besteht aus 7 Drehtellern welche wiederum je aus 16 Fächer
@@ -11,9 +14,8 @@ import java.time.LocalDate;
  */
 public class Automat {
   
-  private static final int NR_DREHTELLER = 7;
-  private Drehteller[] mDrehteller;
-  private Kasse mKasse;
+  private Kasse kasse;
+  private Machine machine;
 
   /**
    * Der Standard-Konstruktor. <br>
@@ -21,9 +23,8 @@ public class Automat {
    * instanziert).
    */
   public Automat() {
-    
-    // TODO 
-    
+    kasse = new Kasse();
+    machine = new Machine(kasse.getRegister(), kasse.getTransactionLog());
   }
 
   /**
@@ -44,16 +45,15 @@ public class Automat {
    */
   public void neueWareVonBarcodeLeser(int pDrehtellerNr, String pWarenName, 
                                       double pPreis, LocalDate pVerfallsDatum) {
-    
-    // TODO
-    
+    Product newProduct = new Product(pWarenName, BigDecimal.valueOf(pPreis), pVerfallsDatum);
+    machine.readNewProduct(pDrehtellerNr-1, newProduct);
   }
 
   /**
    * Gibt die Objekt-Referenz auf die <em> Kasse </em> zurück.
    */
   public Kasse gibKasse() {
-    return mKasse;
+    return kasse;
   }
 
   /**
@@ -67,9 +67,7 @@ public class Automat {
    * wenn ein Fach offen ist.
    */
   public void drehen() {
-    
-    // TODO
-    
+    machine.rotatePlates();
   }
 
   /**
@@ -96,8 +94,11 @@ public class Automat {
    * @return Wenn alles o.k. <code> true </code>, sonst <code> false </code>.
    */
   public boolean oeffnen(int pDrehtellerNr) {
-    
-    return false;  // TODO
+    boolean readyToOpen = machine.openRotaryPlate(pDrehtellerNr - 1);
+    if (readyToOpen) {
+      SystemSoftware.entriegeln(plateNumber);
+    }
+    return readyToOpen;
     
   }
 
@@ -111,7 +112,7 @@ public class Automat {
    */
   public double gibTotalenWarenWert() {
     
-    return 0.0; // TODO
+    return machine.computeTotalOfProducts().doubleValue();
     
   }
 
@@ -125,7 +126,7 @@ public class Automat {
    */
   public int gibVerkaufsStatistik(String pName, LocalDate pDatum) {
     
-    return 0; // TODO
+    return machine.numberOfSalesPerProductSince(pName, pDatum);
     
   }
   
