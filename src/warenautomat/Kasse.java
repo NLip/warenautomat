@@ -1,7 +1,12 @@
 package warenautomat;
 
-
+import state.Register;
+import values.Denomination;
+import values.RegisterUpdate;
 import warenautomat.SystemSoftware;
+import static java.lang.Math.min;
+
+import java.util.Map;
 
 /**
  * Die Kasse verwaltet das eingenommene Geld sowie das Wechselgeld. <br>
@@ -13,15 +18,14 @@ import warenautomat.SystemSoftware;
  * - 2 Franken <br>
  */
 public class Kasse {
-
+	private final static int DENOMINATION_NOT_SUPPORTED = -200;
+	private final Register register;
   /**
    * Standard-Konstruktor. <br>
    * Führt die nötigen Initialisierungen durch.
    */
   public Kasse() {
-    
-    // TODO
-    
+    this.register = new Register();
   }
 
   /**
@@ -44,10 +48,13 @@ public class Kasse {
    *         Wenn ein nicht unterstützter Münzbetrag übergeben wurde: -200
    */
   public int verwalteMuenzbestand(double pMuenzenBetrag, int pAnzahl) {
-    
-    return 0; // TODO
-    
-  }
+	  var maybeDenomination = Denomination.fromDouble(pMuenzenBetrag);
+	  if (maybeDenomination.isEmpty()) {
+		  return DENOMINATION_NOT_SUPPORTED;
+	  }
+	  var registerUpdate = new RegisterUpdate(maybeDenomination.get(), pAnzahl);
+	  return register.propose(registerUpdate).getNumberOfCoins();
+  } 
 
   /**
    * Diese Methode wird aufgerufen nachdem das Personal beim Geldauffüllen den
@@ -57,9 +64,7 @@ public class Kasse {
    * <code>verwalteMuenzbestand()</code>.
    */
   public void verwalteMuenzbestandBestaetigung() {
-    
-    // TODO
-    
+    register.commitProposedUpdate();
   }
  
   /**
