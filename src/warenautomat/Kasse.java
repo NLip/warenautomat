@@ -1,13 +1,12 @@
 package warenautomat;
 
+import java.math.BigDecimal;
+
 import nlip.github.vendingmachine.Register;
-import nlip.github.vendingmachine.exceptions.InvalidOperationException;
 import nlip.github.vendingmachine.internalstate.TransactionLog;
 import nlip.github.vendingmachine.values.Denomination;
 import nlip.github.vendingmachine.values.RegisterUpdate;
 import nlip.github.vendingmachine.values.Transaction;
-
-import java.math.BigDecimal;
 
 /**
  * Die Kasse verwaltet das eingenommene Geld sowie das Wechselgeld. <br>
@@ -103,7 +102,7 @@ public class Kasse {
   public boolean einnehmen(double pMuenzenBetrag) {
       Denomination denomination =
           Denomination.fromDouble(pMuenzenBetrag)
-              .orElseThrow(() -> new InvalidOperationException("This coin is not supported."));
+              .orElseThrow(() -> new IllegalArgumentException(String.format("Denomination of %d is not supported.", pMuenzenBetrag)));
 
       return register.tryPutCoin(denomination);
   }
