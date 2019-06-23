@@ -36,49 +36,49 @@ public class WarenAutomatTest {
                                       LocalDate.parse("01.01.2001", FORMATTER));
       System.out.println("*** automat.drehen():");      
       automat.drehen();
-//      System.out.println("*** Drehteller Nr.2 mit einem \"Zwei\" füllen:");
-//      automat.neueWareVonBarcodeLeser(2, "Zwei", 2.00, 
-//                                      LocalDate.parse("01.01.2002", FORMATTER));
-//      SystemSoftware.output(false);
-//      System.out.println("*** automat.drehen():");      
-//      automat.drehen();
-//      SystemSoftware.output(true);
-//      System.out.println("*** Drehteller Nr.3 mit einem \"Drei\" füllen:");
-//      automat.neueWareVonBarcodeLeser(3, "Drei", 3.00, 
-//                                      LocalDate.parse("01.01.2003", FORMATTER));
-//      SystemSoftware.output(false);
-//      System.out.println("*** Drehen bis Fach Nr.16 vor der Öffnung ist:");
-//      for (int i = 4; i <= 16; i++) {
-//        automat.drehen();
-//      }
-//      SystemSoftware.output(true);
-//      System.out.println("*** automat.drehen(): jetzt Fach Nr. 1:");      
-//      automat.drehen();
-//      System.out.println("*** automat.drehen(): jetzt Fach Nr. 2:");      
-//      automat.drehen();
-//      System.out.println("*** automat.drehen(): jetzt Fach Nr. 3:");      
-//      automat.drehen();
-//        
-//      System.out.println("=== Drehteller-Test. =================================");
-//   
-//      System.out.println("=== Öffnen-Test: =====================================");
-//
-//      System.out.println("*** Drehteller Nr.5 mit einem Mars füllen:");
-//      automat.neueWareVonBarcodeLeser(5, "Mars", 1.50, 
-//                                      LocalDate.parse("01.01.2100", FORMATTER));
-//      System.out.println("*** Automat.gibTotalenWarenWert() = " 
-//          + automat.gibTotalenWarenWert());
-//      Kasse kasse = automat.gibKasse();
-//      System.out.println("*** kasse.einnehmen(1.00):");
-//      kasse.einnehmen(1.00);
-//      System.out.println("*** kasse.einnehmen(0.50):");
-//      kasse.einnehmen(0.50);
-//      System.out.println("*** automat.oeffnen(5):");
-//      System.out.println("*** automat.oeffnen(5): " + automat.oeffnen(5));
-//      
-//      System.out.println("=== Öffnen-Test. =====================================");
-//     
-//      // ... etc. ...
+      System.out.println("*** Drehteller Nr.2 mit einem \"Zwei\" füllen:");
+      automat.neueWareVonBarcodeLeser(2, "Zwei", 2.00, 
+                                      LocalDate.parse("01.01.2002", FORMATTER));
+      SystemSoftware.output(false);
+      System.out.println("*** automat.drehen():");      
+      automat.drehen();
+      SystemSoftware.output(true);
+      System.out.println("*** Drehteller Nr.3 mit einem \"Drei\" füllen:");
+      automat.neueWareVonBarcodeLeser(3, "Drei", 3.00, 
+                                      LocalDate.parse("01.01.2003", FORMATTER));
+      SystemSoftware.output(false);
+      System.out.println("*** Drehen bis Fach Nr.16 vor der Öffnung ist:");
+      for (int i = 4; i <= 16; i++) {
+        automat.drehen();
+      }
+      SystemSoftware.output(true);
+      System.out.println("*** automat.drehen(): jetzt Fach Nr. 1:");      
+      automat.drehen();
+      System.out.println("*** automat.drehen(): jetzt Fach Nr. 2:");      
+      automat.drehen();
+      System.out.println("*** automat.drehen(): jetzt Fach Nr. 3:");      
+      automat.drehen();
+        
+      System.out.println("=== Drehteller-Test. =================================");
+   
+      System.out.println("=== Öffnen-Test: =====================================");
+
+      System.out.println("*** Drehteller Nr.5 mit einem Mars füllen:");
+      automat.neueWareVonBarcodeLeser(5, "Mars", 1.50, 
+                                      LocalDate.parse("01.01.2100", FORMATTER));
+      System.out.println("*** Automat.gibTotalenWarenWert() = " 
+          + automat.gibTotalenWarenWert());
+      Kasse kasse = automat.gibKasse();
+      System.out.println("*** kasse.einnehmen(1.00):");
+      kasse.einnehmen(1.00);
+      System.out.println("*** kasse.einnehmen(0.50):");
+      kasse.einnehmen(0.50);
+      System.out.println("*** automat.oeffnen(5):");
+      System.out.println("*** automat.oeffnen(5): " + automat.oeffnen(5));
+      
+      System.out.println("=== Öffnen-Test. =====================================");
+     
+     // ... etc. ...
       
     }
     

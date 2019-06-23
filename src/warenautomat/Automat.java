@@ -2,8 +2,11 @@ package warenautomat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import state.Machine;
-import values.Product;
+
+import nlip.github.vendingmachine.Machine;
+import nlip.github.vendingmachine.Register;
+import nlip.github.vendingmachine.internalstate.TransactionLog;
+import nlip.github.vendingmachine.values.Product;
 
 /**
  * Der Automat besteht aus 7 Drehtellern welche wiederum je aus 16 Fächer
@@ -23,8 +26,10 @@ public class Automat {
    * instanziert).
    */
   public Automat() {
-    kasse = new Kasse();
-    machine = new Machine(kasse.getRegister(), kasse.getTransactionLog());
+	var register = new Register();
+	var transactionLog = new TransactionLog();
+    this.kasse = new Kasse(register, transactionLog);
+    this.machine = new Machine(register, transactionLog);
   }
 
   /**
@@ -94,12 +99,7 @@ public class Automat {
    * @return Wenn alles o.k. <code> true </code>, sonst <code> false </code>.
    */
   public boolean oeffnen(int pDrehtellerNr) {
-    boolean readyToOpen = machine.openRotaryPlate(pDrehtellerNr - 1);
-    if (readyToOpen) {
-      SystemSoftware.entriegeln(plateNumber);
-    }
-    return readyToOpen;
-    
+    return machine.tryOpen(pDrehtellerNr);
   }
 
   /**
@@ -111,8 +111,7 @@ public class Automat {
    * @return Der totale Warenwert des Automaten.
    */
   public double gibTotalenWarenWert() {
-    
-    return machine.computeTotalOfProducts().doubleValue();
+    return machine.getCurrentTotalProductValue().doubleValue();
     
   }
 
@@ -126,7 +125,7 @@ public class Automat {
    */
   public int gibVerkaufsStatistik(String pName, LocalDate pDatum) {
     
-    return machine.numberOfSalesPerProductSince(pName, pDatum);
+    return machine.getNumberOfProductSoldSince(pName, pDatum);
     
   }
   

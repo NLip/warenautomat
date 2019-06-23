@@ -1,8 +1,0 @@
-package values;
-
-public enum CustomerProblem {
-  INSUFFICIENT_BALANCE,
-  INSUFFICIENT_CHANGE,
-  PRODUCT_MISSING,
-  PRODUCT_EXPIRED
-}

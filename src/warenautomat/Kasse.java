@@ -1,12 +1,13 @@
 package warenautomat;
 
-import exceptions.InvalidOperationException;
+import nlip.github.vendingmachine.Register;
+import nlip.github.vendingmachine.exceptions.InvalidOperationException;
+import nlip.github.vendingmachine.internalstate.TransactionLog;
+import nlip.github.vendingmachine.values.Denomination;
+import nlip.github.vendingmachine.values.RegisterUpdate;
+import nlip.github.vendingmachine.values.Transaction;
+
 import java.math.BigDecimal;
-import state.Register;
-import state.TransactionLog;
-import values.Denomination;
-import values.RegisterUpdate;
-import values.Transaction;
 
 /**
  * Die Kasse verwaltet das eingenommene Geld sowie das Wechselgeld. <br>
@@ -29,7 +30,19 @@ public class Kasse {
     this.register = new Register();
     this.transactionLog = new TransactionLog();
   }
-
+  
+  /**
+   * All-Args-Konstruktor. <br>
+   * Erstellt Kasse mit übergebenen Abhängigkeiten.
+   * 
+   * @param register Register Abhängigkeit
+   * @param transactionLog TransactionLog Abhängigkeit
+   */
+  public Kasse(Register register, TransactionLog transactionLog) {
+	    this.register = register;
+	    this.transactionLog = transactionLog;
+  }
+  
   /**
    * Diese Methode wird aufgerufen nachdem das Personal beim Verwalten des
    * Wechselgeldbestand die Münzart und die Anzahl der Münzen über die
@@ -93,7 +106,6 @@ public class Kasse {
               .orElseThrow(() -> new InvalidOperationException("This coin is not supported."));
 
       return register.tryPutCoin(denomination);
-    
   }
 
   /**
@@ -110,18 +122,9 @@ public class Kasse {
    * @return Gesamtbetrag der bisher verkauften Waren.
    */
   public double gibBetragVerkaufteWaren() {
-      BigDecimal sumOfAllIncome = transactionLog.getTransactions()
-          .stream()
-          .map(Transaction::getPriceAtDate)
-          .reduce(BigDecimal.ZERO, BigDecimal::add);
-      return sumOfAllIncome.doubleValue();
+      return transactionLog.stream()
+          .map(Transaction::getPrice)
+          .reduce(BigDecimal.ZERO, BigDecimal::add)
+          .doubleValue();
   }
-
-    public Register getRegister() {
-        return register;
-    }
-
-    public TransactionLog getTransactionLog() {
-        return transactionLog;
-    }
 }
