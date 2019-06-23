@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import nlip.github.vendingmachine.values.Transaction;
 
 public final class TransactionLog {
-  private List<Transaction> transactions;
+  private final List<Transaction> transactions;
 
   public TransactionLog() {
     this.transactions = new ArrayList<>();

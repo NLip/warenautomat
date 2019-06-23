@@ -19,6 +19,7 @@ import nlip.github.vendingmachine.values.Transaction;
  */
 public class Kasse {
 	private final static int DENOMINATION_NOT_SUPPORTED = -200;
+	
 	private final Register register;
 	private final TransactionLog transactionLog;
   /**
@@ -111,7 +112,7 @@ public class Kasse {
    * Bewirkt den Auswurf des Restbetrages.
    */
   public void gibWechselGeld() {
-    register.returnCredit();
+    register.releaseCredit();
   }
 
   /**

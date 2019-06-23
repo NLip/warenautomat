@@ -17,12 +17,12 @@ public final class SystemIntegration {
 
 
   public static void showProductPrice(int plateNumber, BigDecimal price) {
-    SystemSoftware.zeigeWarenPreisAn(plateNumber, price.doubleValue());
+    SystemSoftware.zeigeWarenPreisAn(plateNumber + 1, price.doubleValue());
   }
 
 
   public static void showExpiryStatus(int plateNumber, ExpiryStatus status) {
-    SystemSoftware.zeigeVerfallsDatum(plateNumber, status.getSystemCode());
+    SystemSoftware.zeigeVerfallsDatum(plateNumber + 1, status.getSystemCode());
   }
 
   public static void showAmount(BigDecimal amount) {
@@ -41,10 +41,10 @@ public final class SystemIntegration {
 
 
   public static void unlock(int plateNumber) {
-    SystemSoftware.entriegeln(plateNumber);
+    SystemSoftware.entriegeln(plateNumber + 1);
   }
 
-  public static void releaseChange(Denomination denomination) {
+  public static void releaseCoin(Denomination denomination) {
     SystemSoftware.auswerfenWechselGeld(denomination.getValue().doubleValue());
   }
   

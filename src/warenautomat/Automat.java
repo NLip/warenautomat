@@ -99,7 +99,7 @@ public class Automat {
    * @return Wenn alles o.k. <code> true </code>, sonst <code> false </code>.
    */
   public boolean oeffnen(int pDrehtellerNr) {
-    return machine.tryOpen(pDrehtellerNr);
+    return machine.tryOpen(pDrehtellerNr - 1);
   }
 
   /**

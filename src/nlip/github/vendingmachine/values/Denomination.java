@@ -1,7 +1,5 @@
 package nlip.github.vendingmachine.values;
 
-import static java.util.Comparator.comparing;
-
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -23,8 +21,8 @@ public enum Denomination {
     return value;
   }
 
-  public static Stream<Denomination> descending() {
-    return Stream.of(values()).sorted(comparing(Denomination::getValue).reversed());
+  public static Stream<Denomination> stream() {
+    return Stream.of(values());
   }
 
   public static Optional<Denomination> fromDouble(double value) {

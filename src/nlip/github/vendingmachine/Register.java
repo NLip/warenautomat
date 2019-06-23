@@ -4,7 +4,7 @@ import static java.lang.Math.min;
 import static java.util.stream.Collectors.toMap;
 import static nlip.github.vendingmachine.extensions.MathUtils.clamp;
 import static nlip.github.vendingmachine.extensions.StreamUtils.repeat;
-
+import static java.util.Comparator.comparing;
 import static java.util.Optional.empty;
 
 import java.math.BigDecimal;
@@ -23,7 +23,7 @@ public final class Register {
 	private RegisterUpdate proposedUpdate;
 
 	public Register() {
-		this.coinContainers = Denomination.descending().collect(toMap(x -> x, x -> new CoinContainer()));
+		this.coinContainers = Denomination.stream().collect(toMap(x -> x, __ -> new CoinContainer()));
 		this.proposedChange = new Holdings();
 	}
 
@@ -56,53 +56,59 @@ public final class Register {
 	public boolean tryPutCoin(Denomination denomination) {
 		var container = coinContainers.get(denomination);
 		if (container.isAtCapacity()) {
-			SystemIntegration.releaseChange(denomination);
+			SystemIntegration.releaseCoin(denomination);
+			showCurrentBalance();
 			return false;
 		}
 
 		proposedChange.put(denomination, proposedChange.get(denomination) + 1);
 		container.increment();
 		
-		SystemIntegration.showAmount(proposedChange.getValue());
+		showCurrentBalance();
 		return true;
 	}
 	
-	public boolean validatePotentialPurchase(BigDecimal price) {
+	public boolean tryPurchase(BigDecimal price) {
 		var newBalance = proposedChange.getValue().subtract(price);
 		if (newBalance.signum() < 0) {
 			SystemIntegration.showInsufficientFunds();
 			return false;
 		}
-
-		if (proposeHoldings(newBalance).isEmpty()) {
+		
+		var maybeNewProposedHoldings = proposeHoldings(newBalance);
+		if (maybeNewProposedHoldings.isEmpty()) {
 			SystemIntegration.showInsufficientChange();
 			return false;
 		}
+		
+		proposedChange = maybeNewProposedHoldings.get();
+		showCurrentBalance();
 		return true;
 	}
 
-	public void purchase(BigDecimal price) {
-		proposedChange = proposeHoldings(price)
-				.orElseThrow(() -> new IllegalStateException("Cannot find holdings for purchase."));
-
-	}
-
-	public void returnCredit() {
+	public void releaseCredit() {
 		coinContainers.forEach((denomination, coinContainer) -> {
 			int numberOfCoins = proposedChange.get(denomination);
 			repeat(numberOfCoins, () -> {
-				SystemIntegration.releaseChange(denomination);
 				coinContainer.decrement();
+				SystemIntegration.releaseCoin(denomination);
 			});
 		});
 
 		proposedChange.clear();
+		showCurrentBalance();
+	}
+	
+	private void showCurrentBalance() {
+		SystemIntegration.showAmount(proposedChange.getValue());
 	}
 
 	private Optional<Holdings> proposeHoldings(BigDecimal target) {
 		var holdings = new Holdings();
 		// TODO: Describe algo
-		Denomination.descending().forEach(denomination -> {
+		Denomination.stream()
+		.sorted(comparing(Denomination::getValue).reversed())
+		.forEach(denomination -> {
 			var remainder = target.subtract(holdings.getValue());
 			int availableCoins = coinContainers.get(denomination).getNumberOfCoins();
 			int numberOfCoins = min(availableCoins,
